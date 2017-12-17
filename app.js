@@ -66,3 +66,5 @@ if (argv.import) {
     process.exit(1)
   })
 }
+
+module.exports = app
