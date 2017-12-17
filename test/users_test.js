@@ -46,6 +46,22 @@ describe('Users', () => {
     })
   })
 
+  //test of CRUDL list with search on username
+  describe('/GET users', function () {
+    it('should return a list of users with username containing "red"', function (done) {
+      chai.request(url)
+        .get('/users').query({'username': 'red'})
+        .end(function (err, res) {
+          res.body.should.be.a('array')
+          res.should.have.status(200)
+          res.body.forEach(user => {
+            user.username.should.include('red')
+          })
+          done()
+        })
+    })
+  })
+
 // test of CRUDL Read operation
   describe('/GET users/:id', function () {
     it('should return a single user', function (done) {

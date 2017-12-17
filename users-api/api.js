@@ -2,6 +2,7 @@
 const User = require('../model/userModel')
 const express = require('express')
 const router = express.Router()
+const escapeRegexp = require('escape-string-regexp')
 
 const wrapExceptions = fn =>
   (req, res) =>
@@ -12,7 +13,11 @@ const wrapExceptions = fn =>
 // GET /users
 // Get a list of users
 router.get('/', wrapExceptions(async (req, res) => {
-  const query = User.find({})
+  const username = req.query.username
+  let query = User.find({})
+  if (username) {
+    query = User.find().where({'username': new RegExp(`.*${escapeRegexp(username)}.*`)})
+  }
   const users = await query.exec()
   return res.json(users)
 }))
