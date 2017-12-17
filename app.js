@@ -54,7 +54,7 @@ if (argv.import) {
       process.exit(1)
     }
   })
-} else {
+} else if (require.main === module) { // only run server when run directly, not when running tests
   mongoose.connect('mongodb://localhost/users', {
     useMongoClient: true
   }).then(() => {

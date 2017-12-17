@@ -9,11 +9,12 @@ const util = require('../util')
 const User = require('../model/userModel')
 const expect = require('chai').expect
 const mongoose = require('mongoose')
+let server
 
 chai.should()
 chai.use(chaiHttp)
 chai.use(chaiJsonEqual)
-const url = 'http://127.0.0.1:8080'
+const url = 'http://127.0.0.1:8081'
 
 describe('Users', () => {
   // Before our test suite
@@ -22,8 +23,8 @@ describe('Users', () => {
     mongoose.connect('mongodb://localhost/users', {
       useMongoClient: true
     }).then(() => {
-      app.listen(8081, () => {
-        log.info('Listening at http://localhost:8081 for acceptance tests')
+      server = app.listen(8081, () => {
+        log.info(`Listening at ${url} for acceptance tests`)
       })
     }).then(() => util.importFile('./users.json')).then(() => done()).catch(err => {
       log.error(`Failed to connect to MongoDB: ${err}`)
@@ -118,7 +119,7 @@ describe('Users', () => {
         expect(err).to.not.be.true
         var obj = checkedUser.toObject()
         delete obj.__v
-        delete obj._id  //deletes mongodb columns for comparison
+        delete obj._id  // deletes mongodb columns for comparison
         obj.should.jsonEqual(user)
         done()
       })
@@ -147,4 +148,6 @@ describe('Users', () => {
       })
     })
   })
+
+  after(() => server.close(() => log.info('Server closed.')))
 })
