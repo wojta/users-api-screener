@@ -33,7 +33,7 @@ router.get('/:id', wrapExceptions(async (req, res) => {
 // Creates user, pass user object in request
 router.post('/', wrapExceptions(async (req, res) => {
   const userModel = new User(req.body) // creates model usable by mongoose from JSON object in request
-  const user = await User.create(userModel).exec()
+  const user = await User.create(userModel)
   return res.json(user)
 }))
 

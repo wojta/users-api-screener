@@ -1,5 +1,4 @@
 'use strict'
-// const mongoose = require('mongoose')
 const seeder = require('mongoose-seed')
 const log = require('winston')
 const asyncy = require('asyncy')
