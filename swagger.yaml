@@ -1,0 +1,275 @@
+swagger: '2.0'
+info:
+  description: >-
+    This is a documentation for REST API for a part of interview screener.
+    https://github.com/wojta/users-api-screener
+  version: 1.0.0
+  title: users-api-screner
+tags:
+  - name: users
+    description: Accessing user database
+host: 'localhost:8080'
+paths:
+  /users:
+    get:
+      tags:
+        - users
+      summary: Gets list of users
+      description: 'Returs array of users, it can be filtered by `username`'
+      produces:
+        - application/json
+      parameters:
+        - name: username
+          in: query
+          description: Return only users that contain specified text in `username` field
+          required: false
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        '500':
+          description: server error
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Some error explanation
+    post:
+      tags:
+        - users
+      summary: Creates new user
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: User object to be created
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '200':
+          description: 'successful operation, object is updated and returned'
+          schema:
+            $ref: '#/definitions/User'
+        '500':
+          description: server error
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Some error explanation
+  '/users/{userId}':
+    get:
+      tags:
+        - users
+      summary: Gets user by its id
+      description: Returs one user
+      produces:
+        - application/json
+      parameters:
+        - name: userId
+          in: path
+          description: Id of requested user
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/User'
+        '404':
+          description: user not found
+        '500':
+          description: server error
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Some error explanation
+    put:
+      tags:
+        - users
+      summary: Updates user by its id
+      description: Updates single user by its id
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: userId
+          in: path
+          description: Id of updated user
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Updated user object
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '200':
+          description: 'successful operation, object is updated and returned'
+          schema:
+            $ref: '#/definitions/User'
+        '500':
+          description: server error
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Some error explanation
+    delete:
+      tags:
+        - users
+      summary: Deletes user by its id
+      description: Deletes one user
+      produces:
+        - application/json
+      parameters:
+        - name: userId
+          in: path
+          description: Id of user to be deleted
+          required: true
+          type: string
+      responses:
+        '200':
+          description: 'successful operation, user deleted'
+          schema:
+            type: object
+            properties:
+              removed:
+                $ref: '#/definitions/Removed'
+        '500':
+          description: server error
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Some error explanation
+definitions:
+  User:
+    type: object
+    required:
+      - gender
+      - name
+      - location
+      - email
+      - username
+      - password
+    properties:
+      gender:
+        type: string
+        enum:
+          - male
+          - female
+        example: female
+      name:
+        $ref: '#/definitions/NameComposed'
+      location:
+        $ref: '#/definitions/Address'
+      email:
+        type: string
+        format: email
+        example: florence.fowler@example.com
+      username:
+        type: string
+        example: beautifulfish360
+      password:
+        type: string
+        example: '123457'
+      salt:
+        type: string
+        example: HsxzewdQ
+      md5:
+        type: string
+        example: 5809e5fda81eed34bad9ca6eff414924
+      sha1:
+        type: string
+        example: 6c95f0d9210e88028074d4baaeefc3d6c830a9a3
+      sha256:
+        type: string
+        example: f92fc585c017d093b03dba898162613380f137f934637c5bf9050fe68c103c54
+      registered:
+        type: integer
+        format: int64
+        example: 1180746503
+      dob:
+        type: integer
+        format: int64
+        example: 1028583070
+      phone:
+        type: string
+        example: 041-252-0953
+      cell:
+        type: string
+        example: 081-567-1935
+      PPS:
+        type: string
+        example: 2470896T
+      picture:
+        $ref: '#/definitions/Picture'
+  NameComposed:
+    type: object
+    properties:
+      title:
+        type: string
+        example: Mrs.
+      name:
+        type: string
+        example: Florence
+      surname:
+        type: string
+        example: Fowler
+  Address:
+    type: object
+    properties:
+      street:
+        type: string
+        example: 5047 church lane
+      city:
+        type: string
+        example: Arklow
+      state:
+        type: string
+        example: Indiana
+      zip:
+        type: number
+        example: 58360
+  Picture:
+    type: object
+    properties:
+      large:
+        type: string
+        example: 'https://randomuser.me/api/portraits/women/33.jpg'
+      medium:
+        type: string
+        example: 'https://randomuser.me/api/portraits/med/women/33.jpg'
+      thumbnail:
+        type: string
+        example: 'https://randomuser.me/api/portraits/thumb/women/33.jpg'
+  Removed:
+    type: object
+    properties:
+      'n':
+        type: number
+        description: >-
+          number of lines modified, 1 - if user was deleted, 0 - if user doesn't
+          exist
+        example: 1
+      ok:
+        type: number
+        description: 'operation was ok, should be 1'
+        example: 1
