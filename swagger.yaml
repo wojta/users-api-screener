@@ -4,6 +4,11 @@ info:
     This is a documentation for REST API for a part of interview screener.
     https://github.com/wojta/users-api-screener
   version: 1.0.0
+  contact:
+    email: vsazel@redhat.com
+  license:
+    name: UNLICENSE
+    url: 'https://raw.githubusercontent.com/wojta/users-api-screener/master/LICENSE'
   title: users-api-screner
 tags:
   - name: users
