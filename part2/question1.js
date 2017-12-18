@@ -9,7 +9,7 @@ function foo (callback) {
   doThing(function (err, res) {
     if (err) {
       callback(err)
-    } else {
+    } else { // <<--- there was missing else
       callback(null, res)
     }
   })

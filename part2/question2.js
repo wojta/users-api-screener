@@ -3,6 +3,9 @@ const expect = require('chai').expect
 
 const wait = delay => new Promise((cb, j) => setTimeout(cb, delay))
 
+// problem was that calls are asynchronous, so it needs to wait for both result, this can be solved by Promises or newer
+// async/await
+
 async function remoteMathService (cb) {
   const {err: err1, num: one} = await callOneService()
   const {err: err2, num: two} = await callTwoService()
