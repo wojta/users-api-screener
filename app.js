@@ -24,7 +24,7 @@ yargs
     'clear': {alias: 'c', description: 'clears the database'}
   }).conflicts('import', 'clear')
   .example('./app.js', 'Starts server')
-  .example('./app.js --import users.json', 'Imports file users.json to the database')
+  .example('./app.js --import ./users.json', 'Imports file users.json to the database')
   .example('./app.js --clear', 'Clears the database')
 
 app.use((req, res, next) => {

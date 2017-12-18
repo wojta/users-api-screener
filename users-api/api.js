@@ -10,7 +10,7 @@ const wrapExceptions = fn =>
       .catch(err => res.status(500).json({error: `Error accessing /users: ${err}`})
       )
 
-// GET /users
+// GET /users or GET /users?username=
 // Get a list of users
 router.get('/', wrapExceptions(async (req, res) => {
   const username = req.query.username
